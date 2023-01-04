@@ -1,109 +1,80 @@
-#!/usr/bin/python
-# Authoer: Spencer.Luo
-# Date: 6/23/2018
+"""
+类型: 结构
+模式: 外观模式
+意图: 其为程序库, 框架, 复杂类提供一个简单的接口
+使用场景: 如果你需要一个指向复杂子系统的直接接口, 且该接口的功能有限, 则可以使用外观模式
 
-# Version 1.0
-#=======================================================================================================================
-class Register:
-    """报到登记"""
+    1. 需求: 在代码中使用某个复杂的库或框架中的众多对象, 又不想将业务代码和第三方紧密耦合
+    2. 解决: 外观类为复杂子系统提供一个简单的接口, 提供部分但客户端关心的功能
+    3. 例子: 上传猫咪搞笑短视频到社交媒体网站的应用可能会用到专业的视频转换库, 此时需要一个encode方法的类
+        即可, 在创建该类并将其连接到适配转换库之后, 此时就创建了一个"外观类"
+    4. 电话购物:
+        接线员: 商店的所有服务和部门的外观, 其为你提供一个同购物,支付,送货等进行互动的简单语音接口
+角色:
+    外观: Facade, 提供一种访问特定子系统的便捷方式, 其了解客户端请求, 知晓一切活动部件
+    附加外观: Additional Facade, 避免多种不相关的功能污染单一外观, 客户端和其他外观均可使用附加外观
+    复杂子系统: Complex subsystem, 由数十个不同对象构成. 子系统类不会意识到外观的存在, 但内部可以互相通信
+    客户端: Client, 使用外观代替子系统并进行调用
+优缺点:
+    + 将代码独立于复杂子系统
+    + 外观可能成为与所有类都耦合的"上帝对象"
 
-    def register(self, name):
-        print("活动中心:%s同学报到成功！" % name)
-
-
-class Payment:
-    """缴费中心"""
-
-    def pay(self, name, money):
-        print("缴费中心:收到%s同学%s元付款，缴费成功！" % (name, money) )
-
-
-class DormitoryManagementCenter:
-    """生活中心(宿舍管理中心)"""
-
-    def provideLivingGoods(self, name):
-        print("生活中心:%s同学的生活用品已发放。" % name)
-
-
-class Dormitory:
-    """宿舍"""
-
-    def meetRoommate(self, name):
-        print("宿    舍:" + "大家好！这是刚来的%s同学，是你们未来需要共度四年的室友！相互认识一下……" % name)
-
-
-class Volunteer:
-    """迎新志愿者"""
-
-    def __init__(self, name):
-        self.__name = name
-        self.__register = Register()
-        self.__payment = Payment()
-        self.__lifeCenter = DormitoryManagementCenter()
-        self.__dormintory = Dormitory()
-
-    def welcomeFreshmen(self, name):
-        print("你好,%s同学! 我是新生报到的志愿者%s，我将带你完成整个报到流程。" % (name, self.__name))
-        self.__register.register(name)
-        self.__payment.pay(name, 10000)
-        self.__lifeCenter.provideLivingGoods(name)
-        self.__dormintory.meetRoommate(name)
-
-
-# Version 2.0
-#=======================================================================================================================
-# 代码框架
-#==============================
-
-
-# 基于框架的实现
-#==============================
+与其他模式关系:
+    1. 适配器和外观: 
+        + 外观为现有对象定义了一个新接口, 其作用域整个对象子系统上
+        + 适配器会视图运用已有接口, 其只封装一个对象
+    2. 工厂和外观: 当只需对客户端代码隐藏子系统创建对象的方式时, 可以用工厂代替外观
+    3. 享元和外观: 
+        + 享元展示了如何生成大量的小型对象
+        + 外观展示了如何用一个对象代表整个子系统
+    4. 中介和外观:
+        + 两者都尝试在大量紧密耦合的类中进行组织以便更好的合作
+        + 外观为子系统中"所有对象"定义一个简单接口, 但不提供任何新的功能, 外观对子系统透明
+        + 中介将系统中的组件沟通行为中心化, 各组件都知道中介对象, 组件之间无法互相交流
+    5. 外观和单例: 外观可以转为单例对象, 大部分情况下一个外观对象就够了
+"""
 from os import path
-# 引入path，进行路径相关的处理
 import logging
-# 引入logging，进行错误时的日志记录
+
 
 class ZIPModel:
-    """ZIP模块，负责ZIP文件的压缩与解压
-    这里只进行简单模拟，不进行具体的解压缩逻辑"""
+    """ 子系统: ZIP模块，负责ZIP文件的压缩与解压 """
 
     def compress(self, srcFilePath, dstFilePath):
-        print("ZIP模块正在进行“%s”文件的压缩......" % srcFilePath)
-        print("文件压缩成功，已保存至“%s”" % dstFilePath)
+        print("ZIP模块正在进行'%s'文件的压缩......" % srcFilePath)
+        print("文件压缩成功，已保存至'%s'" % dstFilePath)
 
     def decompress(self, srcFilePath, dstFilePath):
-        print("ZIP模块正在进行“%s”文件的解压......" % srcFilePath)
-        print("文件解压成功，已保存至“%s”" % dstFilePath)
+        print("ZIP模块正在进行'%s'文件的解压......" % srcFilePath)
+        print("文件解压成功，已保存至'%s'" % dstFilePath)
 
 
 class RARModel:
-    """RAR模块，负责RAR文件的压缩与解压
-    这里只进行简单模拟，不进行具体的解压缩逻辑"""
+    """ 子系统: RAR模块，负责RAR文件的压缩与解压 """
 
     def compress(self, srcFilePath, dstFilePath):
-        print("RAR模块正在进行“%s”文件的压缩......" % srcFilePath)
-        print("文件压缩成功，已保存至“%s”" % dstFilePath)
+        print("RAR模块正在进行'%s'文件的压缩......" % srcFilePath)
+        print("文件压缩成功，已保存至'%s'" % dstFilePath)
 
     def decompress(self, srcFilePath, dstFilePath):
-        print("RAR模块正在进行“%s”文件的解压......" % srcFilePath)
-        print("文件解压成功，已保存至“%s”" % dstFilePath)
+        print("RAR模块正在进行'%s'文件的解压......" % srcFilePath)
+        print("文件解压成功，已保存至'%s'" % dstFilePath)
 
 
 class ZModel:
-    """7Z模块，负责7Z文件的压缩与解压
-    这里只进行简单模拟，不进行具体的解压缩逻辑"""
+    """ 子系统: 7Z模块，负责7Z文件的压缩与解压 """
 
     def compress(self, srcFilePath, dstFilePath):
-        print("7Z模块正在进行“%s”文件的压缩......" % srcFilePath)
-        print("文件压缩成功，已保存至“%s”" % dstFilePath)
+        print("7Z模块正在进行'%s'文件的压缩......" % srcFilePath)
+        print("文件压缩成功，已保存至'%s'" % dstFilePath)
 
     def decompress(self, srcFilePath, dstFilePath):
-        print("7Z模块正在进行“%s”文件的解压......" % srcFilePath)
-        print("文件解压成功，已保存至“%s”" % dstFilePath)
+        print("7Z模块正在进行'%s'文件的解压......" % srcFilePath)
+        print("文件解压成功，已保存至'%s'" % dstFilePath)
 
 
 class CompressionFacade:
-    """压缩系统的外观类"""
+    """ 压缩系统的外观类: 其包含子系统所有对象 """
 
     def __init__(self):
         self.__zipModel = ZIPModel()
@@ -111,74 +82,51 @@ class CompressionFacade:
         self.__zModel = ZModel()
 
     def compress(self, srcFilePath, dstFilePath, type):
-        """根据不同的压缩类型，压缩成不同的格式"""
-        # 获取新的文件名
         extName = "." + type
         fullName = dstFilePath + extName
-        if (type.lower() == "zip") :
+        if (type.lower() == "zip"):
             self.__zipModel.compress(srcFilePath, fullName)
-        elif(type.lower() == "rar"):
+        elif (type.lower() == "rar"):
             self.__rarModel.compress(srcFilePath, fullName)
-        elif(type.lower() == "7z"):
+        elif (type.lower() == "7z"):
             self.__zModel.compress(srcFilePath, fullName)
         else:
-            logging.error("Not support this format:" + str(type))
+            print(f"Not support this format:{type}")
             return False
         return True
 
     def decompress(self, srcFilePath, dstFilePath):
-        """从srcFilePath中获取后缀，根据不同的后缀名(拓展名)，进行不同格式的解压"""
         baseName = path.basename(srcFilePath)
         extName = baseName.split(".")[1]
-        if (extName.lower() == "zip") :
+        if (extName.lower() == "zip"):
             self.__zipModel.decompress(srcFilePath, dstFilePath)
-        elif(extName.lower() == "rar"):
+        elif (extName.lower() == "rar"):
             self.__rarModel.decompress(srcFilePath, dstFilePath)
-        elif(extName.lower() == "7z"):
+        elif (extName.lower() == "7z"):
             self.__zModel.decompress(srcFilePath, dstFilePath)
         else:
-            logging.error("Not support this format:" + str(extName))
+            print(f"Not support this format {extName}:")
             return False
         return True
 
 
-# Test
-#=======================================================================================================================
-def testRegister():
-    volunteer = Volunteer("Frank")
-    volunteer.welcomeFreshmen("Tony")
-
-
 def testCompression():
+    """ 客户端: 使用外观替代子系统, 保持客户端业务代码和第三方低耦合 """
+    print('---' * 20)
     facade = CompressionFacade()
-    facade.compress("E:\标准文件\生活中的外观模式.md",
-                    "E:\压缩文件\生活中的外观模式", "zip")
-    facade.decompress("E:\压缩文件\生活中的外观模式.zip",
-                      "E:\标准文件\生活中的外观模式.md")
+    facade.compress("/root/standard/example.md", "/root/zip/example", "zip")
+    facade.decompress("/root/zip/example.zip", "/root/standard/example.md")
     print()
 
-    facade.compress("E:\标准文件\Python编程——从入门到实践.pdf",
-                    "E:\压缩文件\Python编程——从入门到实践", "rar")
-    facade.decompress("E:\压缩文件\Python编程——从入门到实践.rar",
-                      "E:\标准文件\Python编程——从入门到实践.pdf")
+    print('---' * 20)
+    facade.compress("/root/standard/rarfile.pdf", "/root/zip/rarfile", "rar")
+    facade.decompress("/root/zip/rarfile.rar", "/root/standard/rarfile.pdf")
     print()
 
-    facade.compress("E:\标准文件\谈谈我对项目重构的看法.doc",
-                    "E:\压缩文件\谈谈我对项目重构的看法", "7z")
-    facade.decompress("E:\压缩文件\谈谈我对项目重构的看法.7z",
-                      "E:\标准文件\谈谈我对项目重构的看法.doc")
+    print('---' * 20)
+    facade.compress("/root/standard/thinking.doc", "/root/zip/thinking", "7z")
+    facade.decompress("/root/zip/thinking.7z", "/root/standard/thinking.doc")
     print()
 
 
-def testPath():
-    filePath = "E:\解析文件\生活中的外观模式——学妹别慌，学长帮你.md"
-    dirName = path.dirname(filePath)
-    baseName = path.basename(filePath)
-    fileName, extName = baseName.split('.')
-    fullName = path.join(dirName, fileName + extName)
-    i = 0
-
-
-# testRegister()
 testCompression()
-# testPath()

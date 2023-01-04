@@ -72,7 +72,7 @@ class Person:
         self.height = height
 
     def showMysef(self):
-        print("%s 年龄：%d岁，体重：%0.2fkg，身高：%0.2fm" % (self.name, self.age, self.weight, self.height) )
+        print("%s 年龄：%d岁，体重：%0.2fkg，身高：%0.2fm" % (self.name, self.age, self.weight, self.height))
 
 
 class ICompare(metaclass=ABCMeta):
@@ -118,12 +118,12 @@ class SortPerson:
         """排序算法
         这里采用最简单的冒泡排序"""
         n = len(personList)
-        for i in range(0, n-1):
-            for j in range(0, n-i-1):
-                if(self.__compare.comparable(personList[j], personList[j+1]) > 0):
+        for i in range(0, n - 1):
+            for j in range(0, n - i - 1):
+                if (self.__compare.comparable(personList[j], personList[j + 1]) > 0):
                     tmp = personList[j]
-                    personList[j] = personList[j+1]
-                    personList[j+1] = tmp
+                    personList[j] = personList[j + 1]
+                    personList[j + 1] = tmp
             j += 1
         i += 1
 
@@ -178,7 +178,7 @@ def testSortPerson():
 
 
 
-from operator import itemgetter,attrgetter
+from operator import itemgetter, attrgetter
 
 def testPersonListInPython():
     "用Python的方式对Person进行排序"
@@ -192,7 +192,7 @@ def testPersonListInPython():
     ]
 
     # 使用operator模块根据年龄、身高进行排序
-    sortedPerons = sorted(personList, key = attrgetter('age'))
+    sortedPerons = sorted(personList, key=attrgetter('age'))
     sortedPerons1 = sorted(personList, key=attrgetter('height'))
 
     print("根据年龄进行排序后的结果：")

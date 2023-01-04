@@ -1,63 +1,37 @@
-#!/usr/bin/python
-# Authoer: Spencer.Luo
-# Date: 4/1/2018
+"""
+类型: 创建型模式
+模式: 原型或者克隆模式
+意图: 克隆一个对象, 但是对象本身可能包含私有成员变量或者对外隐藏的实现等, 对于一些特殊的需求: 不克隆对象的
+    所有数据, 每一个对象自身都有自己的极度隐秘信息(这种需求很少), 此时在python中使用deepcopy就无法达到此需求
 
-# Version 1.0
-#=======================================================================================================================
-# from copy import copy, deepcopy
-#
-# class Person:
-#     """人"""
-#
-#     def __init__(self, name, age):
-#         self.__name = name
-#         self.__age = age
-#
-#     def showMyself(self):
-#         print("我是" + self.__name + ",年龄" + str(self.__age) + ".")
-#
-#     def coding(self):
-#         print("我是码农，我用程序改变世界，Coding...")
-#
-#     def reading(self):
-#         print("阅读使我快乐！知识使我成长！如饥似渴地阅读是生活的一部分...")
-#
-#     def fallInLove(self):
-#         print("春风吹，月亮明，花前月下好相约...")
-#
-#     def clone(self):
-#         return copy(self)
+解决办法: 采用克隆模式, 由被克隆者自身暴露克隆接口给外部, 让外部按照被克隆者的期望进行数据克隆动作
+角色:
+    原型: prototype, 支持克隆自身的对象, 一般克隆方法名字为: clone
+    具体原型: concret prototype, 将clone方法实现的子类, 其可能还伴随的具体需求进行差异化克隆
+    客户端: client, 对原型对象进行各种clone操作
+    原型注册表: prototype registry, 提供一种访问常用原型的简单方法, 其中存储了一系列可随时赋值预生成对象
+    预生成原型: 创建一系列不同类型的对象并进行各种配置, 后续若所需对象和预生成对象类型一致则直接克隆即可
 
+需求: 客户端需要复制一些对象, 有希望代码独立于这些对象所述的具体类(子类)
 
-# 浅拷贝与深拷贝
-#=======================================================================================================================
+可能场景:
+    1. 若对象的子类仅仅是变化对象的初始化方式, 其他同基类保持不变, 那可以用克隆模式替换子类继承, 在基类
+        中预注册多个预生成对象, 后续使用时根据需求进行克隆并返回即可.
+    
+优点:
+    1. 克隆对象, 无需和具体类耦合
+    2. 克隆预生成原型, 避免反复初始化代码
+    3. 以继承以外的方式来处理多态
+缺点:
+    1. 克隆复杂对象时比较麻烦, 比如循环引用
+
+其他模式:
+    1. 大量使用组合模式和装饰模式的设计通常可从对于原型的使用中获益, 通过该模式来复制复杂结构
+    2. 原型可用于保存命令模式的历史记录
+    3. 原型可以作为备忘录模式的一个简化版本
+"""
 from copy import copy, deepcopy
 
-class PetStore:
-    """宠物店"""
-
-    def __init__(self, name):
-        self.__name = name
-        self.__petList = []
-
-    def setName(self, name):
-        self.__name = name
-
-    def showMyself(self):
-        print("%s 宠物店有以下宠物：" % self.__name)
-        for pet in self.__petList:
-            print(pet + "\t", end="")
-        print()
-
-    def addPet(self, pet):
-        self.__petList.append(pet)
-
-
-# Version 2.0
-#=======================================================================================================================
-# 代码框架
-#==============================
-from copy import copy, deepcopy
 
 class Clone:
     """克隆的基类"""
@@ -71,30 +45,6 @@ class Clone:
         return deepcopy(self)
 
 
-# 基于框架的实现
-#==============================
-class Person(Clone):
-    """人"""
-
-    def __init__(self, name, age):
-        self.__name = name
-        self.__age = age
-
-    def showMyself(self):
-        print("我是" + self.__name + ",年龄" + str(self.__age) + ".")
-
-    def coding(self):
-        print("我是码农，我用程序改变世界，Coding...")
-
-    def reading(self):
-        print("阅读使我快乐！知识使我成长！如饥似渴地阅读是生活的一部分...")
-
-    def fallInLove(self):
-        print("春风吹，月亮明，花前月下好相约...")
-
-
-# 实战应用
-# =======================================================================================================================
 class AppConfig(Clone):
     """应用程序功能配置"""
 
@@ -146,86 +96,19 @@ class AppConfig(Clone):
         self.__logPath = logPath
 
 
-# Test
-#=======================================================================================================================
-
-def testClone():
-    tony = Person("Tony", 27)
-    tony.showMyself()
-    tony.coding()
-
-    tony1 = tony.clone()
-    tony1.showMyself()
-    tony1.reading()
-
-    tony2 = tony.clone()
-    tony2.showMyself()
-    tony2.fallInLove()
-
-
-def testPetStore():
-    petter = PetStore("Petter")
-    petter.addPet("小狗Coco")
-    print("父本petter：", end="")
-    petter.showMyself()
-    print()
-
-    petter1 = deepcopy(petter)
-    petter1.addPet("小猫Amy")
-    print("副本petter1：", end="")
-    petter1.showMyself()
-    print("父本petter：", end="")
-    petter.showMyself()
-    print()
-
-    petter2 = copy(petter)
-    petter2.addPet("小兔Ricky")
-    print("副本petter2：", end="")
-    petter2.showMyself()
-    print("父本petter：", end="")
-    petter.showMyself()
-
-
-def testList():
-    list = [1, 2, 3];
-    list1 = list;
-    print("id(list):", id(list))
-    print("id(list1):", id(list1))
-    print("修改之前：")
-    print("list:", list)
-    print("list1:", list1)
-    list1.append(4);
-    print("修改之后：")
-    print("list:", list)
-    print("list1:", list1)
-
-    # petter = PetStore("Petter")
-    # petter.addPet("小狗Coco")
-    # print("父本tony：", end="")
-    # petter.showMyself()
-    #
-    # petter1 = petter
-    # petter1.addPet("小猫Amy")
-    # print("副本tony1：", end="")
-    # petter1.showMyself()
-    # print("父本tony：", end="")
-    # petter.showMyself()
-
-
-
 def testAppConfig():
+    print('---------初始化对象---------')
     defaultConfig = AppConfig("default")
     defaultConfig.showInfo()
     print()
 
+    print('---------克隆对象---------')
     newConfig = defaultConfig.copyConfig("tonyConfig")
     newConfig.setFontType("雅黑")
     newConfig.setFontSize(18)
     newConfig.setLanguage("English")
     newConfig.showInfo()
+    print()
 
 
-# testClone()
-# testPetStore()
-# testList()
 testAppConfig()

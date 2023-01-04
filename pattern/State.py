@@ -127,7 +127,7 @@ class Context(metaclass=ABCMeta):
     def _setStateInfo(self, stateInfo):
         self.__stateInfo = stateInfo
         for state in self.__states:
-            if( state.isMatch(stateInfo) ):
+            if (state.isMatch(stateInfo)):
                 self.changeState(state)
 
     def _getStateInfo(self):
@@ -179,7 +179,7 @@ class Water(Context):
 
     def behavior(self):
         state = self.getState()
-        if(isinstance(state, State)):
+        if (isinstance(state, State)):
             state.behavior(self)
 
 

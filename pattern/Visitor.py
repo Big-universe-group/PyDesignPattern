@@ -145,8 +145,8 @@ class Cat(Animal):
 class Dog(Animal):
     """狗"""
 
-    def __init__(self,  name, isMale, age, weight):
-        super().__init__( name, isMale, age, weight)
+    def __init__(self, name, isMale, age, weight):
+        super().__init__(name, isMale, age, weight)
 
     def speak(self):
         print("wang~")
@@ -177,7 +177,7 @@ class GenderCounter(Visitor):
 
     def getInfo(self):
         print("%d只雄猫，%d只雌猫，%d只雄狗，%d只雌狗。"
-              % (self.__maleCat, self.__femaleCat, self.__maleDog, self.__femalDog) )
+              % (self.__maleCat, self.__femaleCat, self.__maleDog, self.__femalDog))
 
 
 class WeightCounter(Visitor):
@@ -187,11 +187,11 @@ class WeightCounter(Visitor):
         self.__catNum = 0
         self.__catWeight = 0
         self.__dogNum = 0
-        self.__dogWeight  = 0
+        self.__dogWeight = 0
 
     def visit(self, data):
         if isinstance(data, Cat):
-            self.__catNum +=1
+            self.__catNum += 1
             self.__catWeight += data.getWeight()
         elif isinstance(data, Dog):
             self.__dogNum += 1
@@ -201,7 +201,7 @@ class WeightCounter(Visitor):
 
     def getInfo(self):
         print("猫的平均体重是：%0.2fkg， 狗的平均体重是：%0.2fkg" %
-              ((self.__catWeight / self.__catNum),(self.__dogWeight / self.__dogNum)))
+              ((self.__catWeight / self.__catNum), (self.__dogWeight / self.__dogNum)))
 
 
 class AgeCounter(Visitor):
@@ -222,14 +222,14 @@ class AgeCounter(Visitor):
             print("Not support this type")
 
     def getInfo(self):
-        print("猫的最大年龄是：%s，狗的最大年龄是：%s" % (self.__catMaxAge, self.__dogMaxAge) )
+        print("猫的最大年龄是：%s，狗的最大年龄是：%s" % (self.__catMaxAge, self.__dogMaxAge))
 
 # Test
 #=======================================================================================================================
 
 def testBook():
     book = DesignPatternBook()
-    fans = [Engineer(), ProductManager(), OtherFriend()];
+    fans = [Engineer(), ProductManager(), OtherFriend()]
     for fan in fans:
         fan.read(book)
 

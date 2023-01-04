@@ -45,9 +45,9 @@ class Coffeemaker:
     @staticmethod
     def makeCoffee(coffeeBean):
         "通过staticmethod装饰器修饰来定义一个静态方法"
-        if(coffeeBean == "拿铁咖啡豆"):
+        if (coffeeBean == "拿铁咖啡豆"):
             coffee = LatteCaffe("拿铁咖啡")
-        elif(coffeeBean == "摩卡咖啡豆"):
+        elif (coffeeBean == "摩卡咖啡豆"):
             coffee = MochaCoffee("摩卡咖啡")
         else:
             raise ValueError("不支持的参数：%s" % coffeeBean)
@@ -150,7 +150,7 @@ class PenFactory:
 #=======================================================================================================================
 def testCoffeeMaker():
     latte = Coffeemaker.makeCoffee("拿铁咖啡豆")
-    print("%s已为您准备好了，口感：%s。请慢慢享用！" % (latte.getName(), latte.getTaste()) )
+    print("%s已为您准备好了，口感：%s。请慢慢享用！" % (latte.getName(), latte.getTaste()))
     mocha = Coffeemaker.makeCoffee("摩卡咖啡豆")
     print("%s已为您准备好了，口感：%s。请慢慢享用！" % (mocha.getName(), mocha.getTaste()))
 
@@ -158,13 +158,13 @@ def testCoffeeMaker():
 def testPenFactory():
     factory = PenFactory()
     linePen = factory.createPen(PenType.PenTypeLine)
-    print("创建了 %s，对象id：%s， 类型：%s" % (linePen.getName(), id(linePen), linePen.getType()) )
+    print("创建了 %s，对象id：%s， 类型：%s" % (linePen.getName(), id(linePen), linePen.getType()))
     rectPen = factory.createPen(PenType.PenTypeRect)
-    print("创建了 %s，对象id：%s， 类型：%s" % (rectPen.getName(), id(rectPen), rectPen.getType()) )
+    print("创建了 %s，对象id：%s， 类型：%s" % (rectPen.getName(), id(rectPen), rectPen.getType()))
     rectPen2 = factory.createPen(PenType.PenTypeRect)
-    print("创建了 %s，对象id：%s， 类型：%s" % (rectPen2.getName(), id(rectPen2), rectPen2.getType()) )
+    print("创建了 %s，对象id：%s， 类型：%s" % (rectPen2.getName(), id(rectPen2), rectPen2.getType()))
     ellipsePen = factory.createPen(PenType.PenTypeEllipse)
-    print("创建了 %s，对象id：%s， 类型：%s" % (ellipsePen.getName(), id(ellipsePen), ellipsePen.getType()) )
+    print("创建了 %s，对象id：%s， 类型：%s" % (ellipsePen.getName(), id(ellipsePen), ellipsePen.getType()))
 
 
 # testCoffeeMaker()

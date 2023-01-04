@@ -88,13 +88,13 @@ class Calculator:
         stack = Stack()
         left = right = None # 左右表达式
         idx = 0
-        while(idx < len(expText)):
+        while (idx < len(expText)):
             if (expText[idx] == '+'):
                 left = stack.pop()
                 idx += 1
                 right = VarExpression(expText[idx])
                 stack.push(AddExpression(left, right))
-            elif(expText[idx] == '-'):
+            elif (expText[idx] == '-'):
                 left = stack.pop()
                 idx += 1
                 right = VarExpression(expText[idx])
@@ -142,7 +142,7 @@ def testStack():
 
 def testCalculator():
     # 获取表达式
-    expStr = input("请输入表达式：");
+    expStr = input("请输入表达式：")
     # 获取各参数的键值对
     newExp, expressionMap = getMapValue(expStr)
     calculator = Calculator(newExp)
@@ -159,7 +159,7 @@ def getMapValue(expStr):
             key = key.strip()  # 去除前后空字符
             newExp.append(key)
             newExp.append(expStr[i])
-            var = input("请输入参数" + key + "的值：");
+            var = input("请输入参数" + key + "的值：")
             var = var.strip()
             expressionMap[key] = float(var)
             preIdx = i + 1
@@ -168,7 +168,7 @@ def getMapValue(expStr):
     key = expStr[preIdx:len(expStr)]
     key = key.strip()  # 去除前后空字符
     newExp.append(key)
-    var = input("请输入参数" + key + "的值：");
+    var = input("请输入参数" + key + "的值：")
     var = var.strip()
     expressionMap[key] = float(var)
 
